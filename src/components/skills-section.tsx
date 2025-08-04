@@ -1,16 +1,16 @@
 import { Progress } from "@/components/ui/progress";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Cpu, Database, Server, Cloud } from "lucide-react";
+import { Cpu, Database, Server, Cloud, Code, Bot, DatabaseZap, Wind } from "lucide-react";
 
 const skills = [
-  { name: "AI & ML", level: 85, icon: <Cpu className="w-8 h-8 mb-2 text-accent" /> },
+  { name: "AI & ML", level: 85, icon: <Bot className="w-8 h-8 mb-2 text-accent" /> },
   { name: "AWS", level: 80, icon: <Cloud className="w-8 h-8 mb-2 text-accent" /> },
-  { name: "Flask", level: 90, icon: <Server className="w-8 h-8 mb-2 text-accent" /> },
-  { name: "PostgreSQL", level: 85, icon: <Database className="w-8 h-8 mb-2 text-accent" /> },
-  { name: "React / Next.js", level: 90 },
-  { name: "Node.js / Express", level: 85 },
-  { name: "Docker", level: 70 },
-  { name: "SQL / NoSQL", level: 85 },
+  { name: "Flask", level: 90, icon: <Wind className="w-8 h-8 mb-2 text-accent" /> },
+  { name: "PostgreSQL", level: 85, icon: <DatabaseZap className="w-8 h-8 mb-2 text-accent" /> },
+  { name: "React / Next.js", level: 90, icon: <Code className="w-8 h-8 mb-2 text-accent" /> },
+  { name: "Node.js / Express", level: 85, icon: <Server className="w-8 h-8 mb-2 text-accent" /> },
+  { name: "Docker", level: 70, icon: <Cpu className="w-8 h-8 mb-2 text-accent" /> },
+  { name: "SQL / NoSQL", level: 85, icon: <Database className="w-8 h-8 mb-2 text-accent" /> },
 ];
 
 export function SkillsSection() {
