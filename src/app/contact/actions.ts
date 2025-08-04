@@ -2,6 +2,9 @@
 'use server';
 
 import { z } from 'zod';
+import { Resend } from 'resend';
+
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 export interface ContactFormState {
     status: 'idle' | 'success' | 'error';
@@ -25,19 +28,37 @@ export async function submitContactForm(
     });
 
     if (!validatedFields.success) {
+        // This is a bit verbose, but gets the first error for a specific field.
+        const firstError = Object.values(validatedFields.error.flatten().fieldErrors)[0]?.[0];
         return {
             status: 'error',
-            message: validatedFields.error.flatten().fieldErrors.message?.[0] || "Invalid form data."
+            message: firstError || "Invalid form data."
         }
     }
     
+    const { name, email, message } = validatedFields.data;
+    
     try {
-        // For demonstration, we'll just log the data.
-        // In a real application, you would send an email or save to a database.
-        console.log('Contact form submitted:');
-        console.log('Name:', validatedFields.data.name);
-        console.log('Email:', validatedFields.data.email);
-        console.log('Message:', validatedFields.data.message);
+        const { data, error } = await resend.emails.send({
+            from: 'Portfolio Contact Form <onboarding@resend.dev>', // Must be from a verified domain in Resend
+            to: 'thunderfistluffy@gamil.com',
+            subject: 'New Message from Portfolio Contact Form',
+            reply_to: email,
+            html: `
+                <p><strong>Name:</strong> ${name}</p>
+                <p><strong>Email:</strong> ${email}</p>
+                <p><strong>Message:</strong></p>
+                <p>${message}</p>
+            `,
+        });
+
+        if (error) {
+            console.error('Resend error:', error);
+            return {
+                status: 'error',
+                message: 'Something went wrong. Please try again.',
+            };
+        }
 
         return {
             status: 'success',
