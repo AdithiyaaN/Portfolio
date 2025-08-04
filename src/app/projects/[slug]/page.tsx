@@ -10,14 +10,13 @@ import { ArrowLeft, ArrowRight } from "lucide-react";
 // This is mock data. In a real application, you'd fetch this from a CMS or database.
 const projects = [
   {
-    title: "E-Commerce Platform",
-    slug: "ecommerce-platform",
-    description: "A full-featured e-commerce site with product listings, a shopping cart, and a secure checkout process. This project demonstrates proficiency in building scalable and secure web applications with a modern stack. The frontend is built with Next.js and TypeScript for a type-safe and performant user experience. Stripe integration provides a reliable and secure payment gateway. Firebase is utilized for backend services like authentication and database.",
-    longDescription: "This comprehensive e-commerce platform was built from the ground up to provide a seamless shopping experience. Key features include user authentication, product catalog with search and filtering, a persistent shopping cart, and a multi-step checkout process powered by Stripe. The architecture is designed for scalability and maintainability, leveraging server-side rendering for fast page loads and SEO benefits.",
+    title: "ID Card Generation App",
+    slug: "id-card-generator",
+    description: "A Python automation script that generates ID cards from a given template and data, streamlining the process of creating professional identification.",
+    longDescription: "This project utilizes Python libraries such as OpenCV and Pillow to automate the creation of ID cards. It takes a data source (like a CSV file) and an ID card template, then programmatically populates the template with employee information, including names, roles, and photos. The script is designed to be efficient and scalable for batch processing.",
     image: "https://placehold.co/1200x600.png",
-    imageHint: "ecommerce website dashboard",
-    tags: ["Next.js", "TypeScript", "Stripe", "Firebase"],
-    liveLink: "/ecommerce",
+    imageHint: "python code editor",
+    tags: ["Python", "Automation", "OpenCV", "Pillow"],
   },
   {
     title: "Task Management App",

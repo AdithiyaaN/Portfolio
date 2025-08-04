@@ -8,12 +8,12 @@ import { cn } from "@/lib/utils";
 
 const projects = [
   {
-    title: "E-Commerce Platform",
-    slug: "ecommerce-platform",
-    description: "A full-featured e-commerce site with product listings, a shopping cart, and a secure checkout process.",
+    title: "ID Card Generation App",
+    slug: "id-card-generator",
+    description: "A Python automation script that generates ID cards from a given template and data.",
     image: "https://placehold.co/600x400.png",
-    imageHint: "ecommerce website",
-    tags: ["Next.js", "TypeScript", "Stripe", "Firebase"],
+    imageHint: "id card python",
+    tags: ["Python", "Automation", "OpenCV"],
   },
   {
     title: "Task Management App",
@@ -45,7 +45,7 @@ export function ProjectsSection() {
             </p>
           </div>
         </div>
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 mt-12 max-w-5xl mx-auto">
+        <div className="mx-auto grid max-w-5xl justify-items-center gap-8 md:grid-cols-2 lg:grid-cols-3 mt-12">
           {projects.map((project) => (
             <Card 
               key={project.title} 
