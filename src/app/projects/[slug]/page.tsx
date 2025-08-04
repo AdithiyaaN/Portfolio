@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 
 // This is mock data. In a real application, you'd fetch this from a CMS or database.
 const projects = [
@@ -17,6 +17,7 @@ const projects = [
     image: "https://placehold.co/1200x600.png",
     imageHint: "ecommerce website dashboard",
     tags: ["Next.js", "TypeScript", "Stripe", "Firebase"],
+    liveLink: "/ecommerce",
   },
   {
     title: "Task Management App",
@@ -74,12 +75,22 @@ export default function ProjectDetailsPage({ params }: { params: { slug: string 
             <main className="flex-1 py-12 md:py-24 lg:py-32">
                 <div className="container mx-auto px-4 md:px-6">
                     <div className="max-w-4xl mx-auto">
-                        <Button asChild variant="ghost" className="mb-8">
-                           <Link href="/">
-                                <ArrowLeft className="mr-2 h-4 w-4" />
-                                Back to All Projects
-                           </Link>
-                        </Button>
+                        <div className="flex justify-between items-center mb-8">
+                            <Button asChild variant="ghost">
+                               <Link href="/">
+                                    <ArrowLeft className="mr-2 h-4 w-4" />
+                                    Back to All Projects
+                               </Link>
+                            </Button>
+                            {project.liveLink && (
+                                <Button asChild>
+                                    <Link href={project.liveLink} target="_blank">
+                                        View Live Project
+                                        <ArrowRight className="ml-2 h-4 w-4" />
+                                    </Link>
+                                </Button>
+                            )}
+                        </div>
                         <h1 className="text-4xl md:text-5xl font-bold tracking-tighter text-accent mb-4">{project.title}</h1>
                         <div className="flex flex-wrap gap-2 mb-8">
                             {project.tags.map(tag => (
