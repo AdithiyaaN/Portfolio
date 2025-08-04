@@ -188,7 +188,8 @@ const ColumnComponent = ({ column, tasks, onAddTask, onMoveTask }: { column: Col
           </CardContent>
         )}
       </Droppable>
-       <CardContent className="p-4 pt-0">
+      {column.id === 'column-1' && (
+        <CardContent className="p-4 pt-0">
           {isAdding ? (
             <AddTaskForm 
                 columnId={column.id} 
@@ -201,7 +202,8 @@ const ColumnComponent = ({ column, tasks, onAddTask, onMoveTask }: { column: Col
                 Add a card
             </Button>
           )}
-      </CardContent>
+        </CardContent>
+      )}
     </Card>
   );
 };
