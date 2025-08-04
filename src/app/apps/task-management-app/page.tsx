@@ -170,8 +170,7 @@ const AddTaskForm = ({ columnId, onAddTask, onCancel }: { columnId: string; onAd
 
 const ColumnComponent = ({ column, tasks, onAddTask, onMoveTask }: { column: Column; tasks: Task[], onAddTask: (content: string, columnId: string) => void; onMoveTask: (taskId: string, sourceColumnId: ColumnId, destinationColumnId: ColumnId) => void; }) => {
   const [isAdding, setIsAdding] = useState(false);
-  const isDropDisabled = column.id !== 'column-1';
-
+  
   return (
     <Card className="w-[350px] bg-background/50 flex flex-col">
       <CardHeader className="flex flex-row items-center justify-between p-4 border-b">
@@ -460,5 +459,7 @@ export default function TaskManagementPage() {
     </div>
   );
 }
+
+    
 
     
