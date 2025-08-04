@@ -349,7 +349,7 @@ export default function TaskManagementPage() {
   };
   
   const addTaskWithPriority = useCallback((content: string, columnId: string, priority: Priority) => {
-      const newTaskId = `task-${Object.keys(data.tasks).length + 1 + Date.now()}`;
+      const newTaskId = `task-${Date.now()}-${Math.random()}`;
       const newTask: Task = { id: newTaskId, content, priority };
 
       const column = data.columns[columnId];
@@ -438,5 +438,3 @@ export default function TaskManagementPage() {
     </div>
   );
 }
-
-    
