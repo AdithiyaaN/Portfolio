@@ -32,29 +32,22 @@ type TaskData = {
 };
 
 const initialData: TaskData = {
-  tasks: {
-    'task-1': { id: 'task-1', content: 'Design the new landing page', priority: 'High', assignee: 'https://placehold.co/32x32.png' },
-    'task-2': { id: 'task-2', content: 'Develop the authentication flow', priority: 'High', assignee: 'https://placehold.co/32x32.png' },
-    'task-3': { id: 'task-3', content: 'Set up the CI/CD pipeline', priority: 'Medium' },
-    'task-4': { id: 'task-4', content: 'Write end-to-end tests for the payment module', priority: 'Low', assignee: 'https://placehold.co/32x32.png' },
-    'task-5': { id: 'task-5', content: 'Review and merge pull requests', priority: 'Medium' },
-    'task-6': { id: 'task-6', content: 'Deploy the latest build to staging', priority: 'Low' },
-  },
+  tasks: {},
   columns: {
     'column-1': {
       id: 'column-1',
       title: 'To Do',
-      taskIds: ['task-1', 'task-2', 'task-3'],
+      taskIds: [],
     },
     'column-2': {
       id: 'column-2',
       title: 'In Progress',
-      taskIds: ['task-4'],
+      taskIds: [],
     },
     'column-3': {
       id: 'column-3',
       title: 'Done',
-      taskIds: ['task-5', 'task-6'],
+      taskIds: [],
     },
   },
   columnOrder: ['column-1', 'column-2', 'column-3'],
@@ -99,7 +92,42 @@ const TaskCard = ({ task, index }: { task: Task; index: number }) => {
   );
 };
 
-const ColumnComponent = ({ column, tasks }: { column: Column; tasks: Task[] }) => {
+const AddTaskForm = ({ columnId, onAddTask, onCancel }: { columnId: string; onAddTask: (content: string, columnId: string) => void; onCancel: () => void; }) => {
+    const [content, setContent] = useState('');
+    const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+    useEffect(() => {
+        textareaRef.current?.focus();
+    }, []);
+
+    const handleSubmit = () => {
+        if (content.trim()) {
+            onAddTask(content.trim(), columnId);
+            setContent('');
+            onCancel();
+        }
+    };
+    
+    return (
+        <div className="space-y-2">
+            <Textarea 
+                ref={textareaRef}
+                value={content}
+                onChange={(e) => setContent(e.target.value)}
+                placeholder="Enter task content..."
+                className="w-full"
+                onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && (e.preventDefault(), handleSubmit())}
+                onBlur={onCancel}
+            />
+            <Button onClick={handleSubmit}>Add Card</Button>
+            <Button variant="ghost" onClick={onCancel}>Cancel</Button>
+        </div>
+    )
+}
+
+const ColumnComponent = ({ column, tasks, onAddTask }: { column: Column; tasks: Task[], onAddTask: (content: string, columnId: string) => void; }) => {
+  const [isAdding, setIsAdding] = useState(false);
+
   return (
     <Card className="w-[350px] bg-background/50 flex flex-col">
       <CardHeader className="flex flex-row items-center justify-between p-4 border-b">
@@ -118,6 +146,20 @@ const ColumnComponent = ({ column, tasks }: { column: Column; tasks: Task[] }) =
           </CardContent>
         )}
       </Droppable>
+       <CardContent className="p-4 pt-0">
+          {isAdding ? (
+            <AddTaskForm 
+                columnId={column.id} 
+                onAddTask={onAddTask} 
+                onCancel={() => setIsAdding(false)} 
+            />
+          ) : (
+             <Button variant="ghost" onClick={() => setIsAdding(true)} className="w-full">
+                <Plus className="mr-2 h-4 w-4" />
+                Add a card
+            </Button>
+          )}
+      </CardContent>
     </Card>
   );
 };
@@ -171,6 +213,38 @@ export default function TaskManagementPage() {
     };
     setData(newState);
   };
+  
+  const handleAddTask = (content: string, columnId: string) => {
+      if (!data) return;
+
+      const newTaskId = `task-${Object.keys(data.tasks).length + 1 + Date.now()}`;
+      const newTask: Task = {
+          id: newTaskId,
+          content,
+          priority: 'Medium', // Default priority
+      };
+
+      const column = data.columns[columnId];
+      const newTaskIds = Array.from(column.taskIds);
+      newTaskIds.push(newTaskId);
+      
+      const newState: TaskData = {
+          ...data,
+          tasks: {
+              ...data.tasks,
+              [newTaskId]: newTask,
+          },
+          columns: {
+              ...data.columns,
+              [columnId]: {
+                  ...column,
+                  taskIds: newTaskIds
+              }
+          }
+      };
+
+      setData(newState);
+  }
 
   if (!data) {
     return (
@@ -206,7 +280,7 @@ export default function TaskManagementPage() {
                             {data.columnOrder.map(columnId => {
                                 const column = data.columns[columnId];
                                 const tasks = column.taskIds.map(taskId => data.tasks[taskId]);
-                                return <ColumnComponent key={column.id} column={column} tasks={tasks} />;
+                                return <ColumnComponent key={column.id} column={column} tasks={tasks} onAddTask={handleAddTask} />;
                             })}
                         </div>
                     </DragDropContext>
