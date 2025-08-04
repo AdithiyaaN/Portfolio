@@ -26,7 +26,7 @@ export function SkillsSection() {
           </div>
         </div>
         <div className="mt-12">
-          <div className="mx-auto grid max-w-5xl justify-items-center gap-6 md:grid-cols-2 lg:grid-cols-4">
+          <div className="grid max-w-5xl grid-cols-1 justify-items-center gap-6 md:grid-cols-2 lg:grid-cols-4 mx-auto">
             {skills.map((skill) => (
               <Card key={skill.name} className="flex flex-col justify-between text-center items-center w-full max-w-xs">
                 <CardHeader>
