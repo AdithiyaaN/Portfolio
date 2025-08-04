@@ -2,33 +2,33 @@ import Image from "next/image";
 import Link from "next/link";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Github } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
 const projects = [
   {
     title: "E-Commerce Platform",
+    slug: "ecommerce-platform",
     description: "A full-featured e-commerce site with product listings, a shopping cart, and a secure checkout process.",
     image: "https://placehold.co/600x400.png",
     imageHint: "ecommerce website",
     tags: ["Next.js", "TypeScript", "Stripe", "Firebase"],
-    githubUrl: "#",
   },
   {
     title: "Task Management App",
+    slug: "task-management-app",
     description: "A collaborative task management tool to help teams stay organized and productive with a drag-and-drop interface.",
     image: "https://placehold.co/600x400.png",
     imageHint: "task manager",
     tags: ["React", "Node.js", "GraphQL", "MongoDB"],
-    githubUrl: "#",
   },
   {
     title: "Personal Blog",
+    slug: "personal-blog",
     description: "A statically generated blog using Next.js and Markdown for content, optimized for performance and SEO.",
     image: "https://placehold.co/600x400.png",
     imageHint: "blog interface",
     tags: ["Next.js", "Markdown", "Tailwind CSS"],
-    githubUrl: "#",
   },
 ];
 
@@ -66,9 +66,9 @@ export function ProjectsSection() {
               </CardContent>
               <CardFooter className="p-6 pt-0">
                 <Button asChild variant="outline" className="w-full hover:bg-accent hover:text-accent-foreground border-accent text-accent">
-                  <Link href={project.githubUrl} target="_blank" rel="noopener noreferrer">
-                    <Github className="mr-2 h-4 w-4" />
-                    View on GitHub
+                  <Link href={`/projects/${project.slug}`}>
+                    View Project
+                    <ArrowRight className="ml-2 h-4 w-4" />
                   </Link>
                 </Button>
               </CardFooter>

@@ -1,13 +1,14 @@
 import { Progress } from "@/components/ui/progress";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Cpu, Database, Server, Cloud } from "lucide-react";
 
 const skills = [
-  { name: "TypeScript", level: 95 },
+  { name: "AI & ML", level: 85, icon: <Cpu className="w-8 h-8 mb-2 text-accent" /> },
+  { name: "AWS", level: 80, icon: <Cloud className="w-8 h-8 mb-2 text-accent" /> },
+  { name: "Flask", level: 90, icon: <Server className="w-8 h-8 mb-2 text-accent" /> },
+  { name: "PostgreSQL", level: 85, icon: <Database className="w-8 h-8 mb-2 text-accent" /> },
   { name: "React / Next.js", level: 90 },
   { name: "Node.js / Express", level: 85 },
-  { name: "Firebase", level: 80 },
-  { name: "GraphQL", level: 75 },
-  { name: "Tailwind CSS", level: 95 },
   { name: "Docker", level: 70 },
   { name: "SQL / NoSQL", level: 85 },
 ];
@@ -26,11 +27,12 @@ export function SkillsSection() {
         </div>
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4 mt-12">
           {skills.map((skill) => (
-            <Card key={skill.name} className="flex flex-col justify-between">
+            <Card key={skill.name} className="flex flex-col justify-between text-center items-center">
               <CardHeader>
+                {skill.icon}
                 <CardTitle>{skill.name}</CardTitle>
               </CardHeader>
-              <CardContent>
+              <CardContent className="w-full">
                 <Progress value={skill.level} className="w-full" aria-label={`${skill.name} proficiency ${skill.level}%`} />
                 <p className="text-right text-sm text-muted-foreground mt-2">{skill.level}%</p>
               </CardContent>

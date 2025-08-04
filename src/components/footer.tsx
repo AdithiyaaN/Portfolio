@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { Github, Linkedin, Twitter, Mail } from "lucide-react";
 import { Button } from "./ui/button";
 
 export function Footer() {
@@ -10,33 +9,12 @@ export function Footer() {
           <div className="text-center">
             <h3 className="text-3xl font-bold tracking-tighter sm:text-4xl text-accent">Get In Touch</h3>
             <p className="mt-2 max-w-md text-muted-foreground">
-              Have a project in mind or just want to say hello? Feel free to reach out.
+              Have a project in mind or just want to say hello? Let's connect.
             </p>
           </div>
           <div className="flex space-x-4">
-            <Button asChild variant="outline" size="icon" className="border-accent text-accent hover:bg-accent hover:text-accent-foreground">
-              <Link href="mailto:adi.portfolio@example.com" target="_blank" rel="noopener noreferrer">
-                <Mail className="h-5 w-5" />
-                <span className="sr-only">Email</span>
-              </Link>
-            </Button>
-            <Button asChild variant="outline" size="icon" className="border-accent text-accent hover:bg-accent hover:text-accent-foreground">
-              <Link href="#" target="_blank" rel="noopener noreferrer">
-                <Github className="h-5 w-5" />
-                <span className="sr-only">GitHub</span>
-              </Link>
-            </Button>
-            <Button asChild variant="outline" size="icon" className="border-accent text-accent hover:bg-accent hover:text-accent-foreground">
-              <Link href="#" target="_blank" rel="noopener noreferrer">
-                <Linkedin className="h-5 w-5" />
-                <span className="sr-only">LinkedIn</span>
-              </Link>
-            </Button>
-            <Button asChild variant="outline" size="icon" className="border-accent text-accent hover:bg-accent hover:text-accent-foreground">
-              <Link href="#" target="_blank" rel="noopener noreferrer">
-                <Twitter className="h-5 w-5" />
-                <span className="sr-only">Twitter</span>
-              </Link>
+            <Button asChild size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90">
+                <Link href="/contact">Contact Me</Link>
             </Button>
           </div>
           <div className="text-center text-sm text-muted-foreground">
