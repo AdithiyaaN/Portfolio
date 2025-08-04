@@ -2,7 +2,6 @@
 'use client';
 
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautiful-dnd';
 import { Header } from '@/components/header';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
@@ -89,47 +88,38 @@ const PriorityBadge = ({ priority }: { priority: Task['priority'] }) => {
     return <Badge className={`text-white ${priorityColors[priority]}`}>{priority}</Badge>
 }
 
-const TaskCard = ({ task, index, columnId, onMoveTask }: { task: Task; index: number; columnId: ColumnId, onMoveTask: (taskId: string, sourceColumnId: ColumnId, destinationColumnId: ColumnId) => void; }) => {
+const TaskCard = ({ task, columnId, onMoveTask }: { task: Task; columnId: ColumnId, onMoveTask: (taskId: string, sourceColumnId: ColumnId, destinationColumnId: ColumnId) => void; }) => {
   return (
-    <Draggable draggableId={task.id} index={index}>
-      {(provided, snapshot) => (
-        <div
-          ref={provided.innerRef}
-          {...provided.draggableProps}
-          {...provided.dragHandleProps}
-          className={`mb-4 ${snapshot.isDragging ? 'shadow-lg' : ''}`}
-        >
-          <Card className="bg-card hover:bg-card/90 flex flex-col">
-            <CardContent className="p-4 pb-0 flex-grow">
-              <p className="font-medium">{task.content}</p>
-              <div className="flex justify-between items-center mt-4">
-                <PriorityBadge priority={task.priority} />
-                {task.assignee && (
-                    <Avatar className="h-8 w-8">
-                        <AvatarImage src={task.assignee} alt="Assignee"/>
-                        <AvatarFallback>AD</AvatarFallback>
-                    </Avatar>
-                )}
-              </div>
-            </CardContent>
-            <CardFooter className="p-4">
-                 {columnId === 'column-1' && (
-                    <Button variant="outline" size="sm" className="w-full" onClick={() => onMoveTask(task.id, 'column-1', 'column-2')}>
-                        <Play className="mr-2 h-4 w-4" />
-                        Start Task
-                    </Button>
-                )}
-                {columnId === 'column-2' && (
-                    <Button variant="outline" size="sm" className="w-full" onClick={() => onMoveTask(task.id, 'column-2', 'column-3')}>
-                        <CheckCircle className="mr-2 h-4 w-4" />
-                        Mark as Done
-                    </Button>
-                )}
-            </CardFooter>
-          </Card>
-        </div>
-      )}
-    </Draggable>
+    <div className="mb-4">
+      <Card className="bg-card hover:bg-card/90 flex flex-col">
+        <CardContent className="p-4 pb-0 flex-grow">
+          <p className="font-medium">{task.content}</p>
+          <div className="flex justify-between items-center mt-4">
+            <PriorityBadge priority={task.priority} />
+            {task.assignee && (
+                <Avatar className="h-8 w-8">
+                    <AvatarImage src={task.assignee} alt="Assignee"/>
+                    <AvatarFallback>AD</AvatarFallback>
+                </Avatar>
+            )}
+          </div>
+        </CardContent>
+        <CardFooter className="p-4">
+             {columnId === 'column-1' && (
+                <Button variant="outline" size="sm" className="w-full" onClick={() => onMoveTask(task.id, 'column-1', 'column-2')}>
+                    <Play className="mr-2 h-4 w-4" />
+                    Start Task
+                </Button>
+            )}
+            {columnId === 'column-2' && (
+                <Button variant="outline" size="sm" className="w-full" onClick={() => onMoveTask(task.id, 'column-2', 'column-3')}>
+                    <CheckCircle className="mr-2 h-4 w-4" />
+                    Mark as Done
+                </Button>
+            )}
+        </CardFooter>
+      </Card>
+    </div>
   );
 };
 
@@ -177,18 +167,11 @@ const ColumnComponent = ({ column, tasks, onAddTask, onMoveTask }: { column: Col
         <CardTitle className="text-lg">{column.title}</CardTitle>
         <Badge variant="secondary">{tasks.length}</Badge>
       </CardHeader>
-      <Droppable droppableId={column.id}>
-        {(provided, snapshot) => (
-          <CardContent
-            ref={provided.innerRef}
-            {...provided.droppableProps}
-            className={`p-4 flex-grow min-h-[100px] transition-colors duration-200 ${snapshot.isDraggingOver ? 'bg-accent/10' : ''}`}
-          >
-            {tasks.map((task, index) => <TaskCard key={task.id} task={task} index={index} columnId={column.id as ColumnId} onMoveTask={onMoveTask} />)}
-            {provided.placeholder}
-          </CardContent>
-        )}
-      </Droppable>
+      <CardContent
+        className={`p-4 flex-grow min-h-[100px] transition-colors duration-200`}
+      >
+        {tasks.map((task, index) => <TaskCard key={task.id} task={task} columnId={column.id as ColumnId} onMoveTask={onMoveTask} />)}
+      </CardContent>
       {column.id === 'column-1' && (
         <CardContent className="p-4 pt-0">
           {isAdding ? (
@@ -265,14 +248,9 @@ const PriorityConfirmationDialog = ({
 
 export default function TaskManagementPage() {
   const [data, setData] = useState<TaskData>(initialData);
-  const [isClient, setIsClient] = useState(false);
   const [isPrioritizing, setIsPrioritizing] = useState(false);
   const [aiSuggestion, setAiSuggestion] = useState<AIPrioritySuggestion>(null);
   const { toast } = useToast();
-
-  useEffect(() => {
-    setIsClient(true)
-  }, []);
 
   const moveTask = useCallback((taskId: string, sourceColumnId: ColumnId, destinationColumnId: ColumnId) => {
     if (!data) return;
@@ -307,54 +285,6 @@ export default function TaskManagementPage() {
         });
     }
   }, [data, toast]);
-
-  const onDragEnd = (result: DropResult) => {
-    const { destination, source, draggableId } = result;
-    if (!destination || !data) return;
-    if (destination.droppableId === source.droppableId && destination.index === source.index) return;
-
-    const startColumn = data.columns[source.droppableId];
-    const finishColumn = data.columns[destination.droppableId];
-
-    if (startColumn === finishColumn) {
-        const newTaskIds = Array.from(startColumn.taskIds);
-        newTaskIds.splice(source.index, 1);
-        newTaskIds.splice(destination.index, 0, draggableId);
-
-        const newColumn = { ...startColumn, taskIds: newTaskIds };
-        const newState = {
-            ...data,
-            columns: { ...data.columns, [newColumn.id]: newColumn },
-        };
-        setData(newState);
-        return;
-    }
-
-    const startTaskIds = Array.from(startColumn.taskIds);
-    startTaskIds.splice(source.index, 1);
-    const newStartColumn = { ...startColumn, taskIds: startTaskIds };
-
-    const finishTaskIds = Array.from(finishColumn.taskIds);
-    finishTaskIds.splice(destination.index, 0, draggableId);
-    const newFinishColumn = { ...finishColumn, taskIds: finishTaskIds };
-
-    const newState = {
-        ...data,
-        columns: {
-            ...data.columns,
-            [newStartColumn.id]: newStartColumn,
-            [newFinishColumn.id]: newFinishColumn,
-        },
-    };
-    setData(newState);
-     if (finishColumn.id === 'column-3') {
-        const task = data.tasks[draggableId];
-        toast({
-            title: "Task Completed!",
-            description: `Great job on finishing "${task.content}"!`,
-        });
-    }
-  };
   
   const addTaskWithPriority = useCallback((content: string, columnId: string, priority: Priority) => {
       const newTaskId = `task-${Date.now()}-${Math.random()}`;
@@ -437,17 +367,13 @@ export default function TaskManagementPage() {
                     </div>
                 )}
                 <div className="flex-1 overflow-x-auto">
-                    {isClient ? (
-                        <DragDropContext onDragEnd={onDragEnd}>
-                            <div className="flex gap-6 h-full pb-4">
-                                {data.columnOrder.map(columnId => {
-                                    const column = data.columns[columnId];
-                                    const tasks = column.taskIds.map(taskId => data.tasks[taskId]);
-                                    return <ColumnComponent key={column.id} column={column} tasks={tasks} onAddTask={handleAddTask} onMoveTask={moveTask} />;
-                                })}
-                            </div>
-                        </DragDropContext>
-                    ) : null}
+                    <div className="flex gap-6 h-full pb-4">
+                        {data.columnOrder.map(columnId => {
+                            const column = data.columns[columnId];
+                            const tasks = column.taskIds.map(taskId => data.tasks[taskId]);
+                            return <ColumnComponent key={column.id} column={column} tasks={tasks} onAddTask={handleAddTask} onMoveTask={moveTask} />;
+                        })}
+                    </div>
                 </div>
             </div>
         </main>
