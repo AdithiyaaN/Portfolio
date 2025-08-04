@@ -32,7 +32,7 @@ const projects = [
       </div>
     ),
     tags: ["React", "Node.js", "GraphQL", "MongoDB"],
-    href: "/projects/task-management-app"
+    href: "/apps/task-management-app"
   },
   {
     title: "Personal Blog",
