@@ -177,7 +177,7 @@ const ColumnComponent = ({ column, tasks, onAddTask, onMoveTask }: { column: Col
         <CardTitle className="text-lg">{column.title}</CardTitle>
         <Badge variant="secondary">{tasks.length}</Badge>
       </CardHeader>
-      <Droppable droppableId={column.id} isDropDisabled={false}>
+      <Droppable droppableId={column.id}>
         {(provided, snapshot) => (
           <CardContent
             ref={provided.innerRef}
@@ -437,7 +437,7 @@ export default function TaskManagementPage() {
                     </div>
                 )}
                 <div className="flex-1 overflow-x-auto">
-                    {isClient && (
+                    {isClient ? (
                         <DragDropContext onDragEnd={onDragEnd}>
                             <div className="flex gap-6 h-full pb-4">
                                 {data.columnOrder.map(columnId => {
@@ -447,7 +447,7 @@ export default function TaskManagementPage() {
                                 })}
                             </div>
                         </DragDropContext>
-                    )}
+                    ) : null}
                 </div>
             </div>
         </main>
@@ -459,11 +459,3 @@ export default function TaskManagementPage() {
     </div>
   );
 }
-
-    
-
-    
-
-    
-
-    
