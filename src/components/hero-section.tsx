@@ -19,7 +19,7 @@ export function HeroSection() {
                 </p>
             </div>
             <div className="w-full max-w-sm sm:max-w-md lg:max-w-none">
-                <Button asChild size="lg" className="w-full sm:w-auto bg-primary text-primary-foreground hover:bg-primary/90">
+                <Button asChild size="lg" className="w-full sm:w-auto bg-foreground text-background hover:bg-foreground/90">
                     <Link href="/projects">View My Projects</Link>
                 </Button>
             </div>
