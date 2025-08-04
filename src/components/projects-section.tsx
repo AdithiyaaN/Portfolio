@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Code, ListChecks, FileText } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 
@@ -12,8 +12,12 @@ const projects = [
     title: "ID Card Generation App",
     slug: "id-card-generator",
     description: "An interactive app to generate professional ID cards on the fly.",
-    image: "https://placehold.co/600x400.png",
-    imageHint: "id card python",
+    icon: <Code className="w-12 h-12 text-accent-foreground" />,
+    pattern: (
+        <div className="absolute inset-0 bg-accent/10 [mask-image:radial-gradient(100%_100%_at_top,white,transparent)]">
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(168,142,91,0.2)_0%,transparent_50%)]"></div>
+        </div>
+    ),
     tags: ["React", "Next.js", "TypeScript"],
     href: "/apps/id-card-generator"
   },
@@ -21,8 +25,12 @@ const projects = [
     title: "Task Management App",
     slug: "task-management-app",
     description: "A collaborative task management tool to help teams stay organized and productive with a drag-and-drop interface.",
-    image: "https://placehold.co/600x400.png",
-    imageHint: "task manager",
+    icon: <ListChecks className="w-12 h-12 text-accent-foreground" />,
+     pattern: (
+      <div className="absolute inset-0 bg-accent/10 [mask-image:linear-gradient(to_bottom,white_50%,transparent_100%)]">
+        <svg className="absolute inset-0 w-full h-full text-accent/20" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="patt" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M0 10h20M10 0v20" stroke="currentColor" strokeWidth="0.5" /></pattern></defs><rect width="100%" height="100%" fill="url(#patt)"/></svg>
+      </div>
+    ),
     tags: ["React", "Node.js", "GraphQL", "MongoDB"],
     href: "/projects/task-management-app"
   },
@@ -30,8 +38,12 @@ const projects = [
     title: "Personal Blog",
     slug: "personal-blog",
     description: "A statically generated blog using Next.js and Markdown for content, optimized for performance and SEO.",
-    image: "https://placehold.co/600x400.png",
-    imageHint: "blog interface",
+    icon: <FileText className="w-12 h-12 text-accent-foreground" />,
+    pattern: (
+      <div className="absolute inset-0 bg-accent/10 [mask-image:radial-gradient(100%_50%_at_center,white,transparent)]">
+        <div className="absolute inset-0 w-full h-full bg-[linear-gradient(to_right,#a88e5b33_1px,transparent_1px),linear-gradient(to_bottom,#a88e5b33_1px,transparent_1px)] bg-[size:1rem_1rem]"></div>
+      </div>
+    ),
     tags: ["Next.js", "Markdown", "Tailwind CSS"],
     href: "/projects/personal-blog"
   },
@@ -57,14 +69,10 @@ export function ProjectsSection() {
                 "flex flex-col overflow-hidden transform transition-transform duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-accent/20"
               )}
             >
-                <Image
-                  src={project.image}
-                  alt={project.title}
-                  width={600}
-                  height={400}
-                  className="object-cover w-full h-48 rounded-t-lg"
-                  data-ai-hint={project.imageHint}
-                />
+              <CardHeader className="relative flex items-center justify-center h-48 w-full bg-accent/5 overflow-hidden">
+                {project.pattern}
+                {project.icon}
+              </CardHeader>
               <CardContent className="flex-grow p-6">
                 <CardTitle className="text-xl font-bold">{project.title}</CardTitle>
                 <div className="mt-4 flex flex-wrap gap-2">
