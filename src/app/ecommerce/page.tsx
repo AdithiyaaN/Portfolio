@@ -22,8 +22,8 @@ function ProductCard({ product }: { product: Product }) {
       </Link>
       <CardContent className="p-4 flex-grow">
         {product.category && <Badge variant="outline" className="mb-2">{product.category}</Badge>}
-        <h3 className="font-semibold text-lg hover:text-accent">
-          <Link href={`/ecommerce/products/${product.id}`}>{product.name}</Link>
+        <h3 className="font-semibold text-lg">
+          <Link href={`/ecommerce/products/${product.id}`} className="hover:text-accent">{product.name}</Link>
         </h3>
         <div className="flex items-center gap-1 mt-2">
             <Star className="w-4 h-4 fill-accent text-accent" />
