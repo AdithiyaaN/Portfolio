@@ -3,7 +3,6 @@
 
 import { useState, useRef, ChangeEvent } from 'react';
 import { Header } from "@/components/header";
-import { Footer } from "@/components/footer";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -154,7 +153,6 @@ export default function IDCardGeneratorPage() {
           </div>
         </div>
       </main>
-      <Footer />
     </div>
   );
 }
