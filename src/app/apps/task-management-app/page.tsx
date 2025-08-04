@@ -169,6 +169,7 @@ const AddTaskForm = ({ columnId, onAddTask, onCancel }: { columnId: string; onAd
 
 const ColumnComponent = ({ column, tasks, onAddTask, onMoveTask }: { column: Column; tasks: Task[], onAddTask: (content: string, columnId: string) => void; onMoveTask: (taskId: string, sourceColumnId: ColumnId, destinationColumnId: ColumnId) => void; }) => {
   const [isAdding, setIsAdding] = useState(false);
+  const isDropDisabled = column.id !== 'column-1';
 
   return (
     <Card className="w-[350px] bg-background/50 flex flex-col">
@@ -176,7 +177,7 @@ const ColumnComponent = ({ column, tasks, onAddTask, onMoveTask }: { column: Col
         <CardTitle className="text-lg">{column.title}</CardTitle>
         <Badge variant="secondary">{tasks.length}</Badge>
       </CardHeader>
-      <Droppable droppableId={column.id}>
+      <Droppable droppableId={column.id} isDropDisabled={isDropDisabled}>
         {(provided, snapshot) => (
           <CardContent
             ref={provided.innerRef}
@@ -218,6 +219,12 @@ const PriorityConfirmationDialog = ({
   onCancel: () => void;
 }) => {
   const [selectedPriority, setSelectedPriority] = useState<Priority | null>(suggestion?.priority || null);
+
+  useEffect(() => {
+    if (suggestion) {
+      setSelectedPriority(suggestion.priority);
+    }
+  }, [suggestion]);
 
   if (!suggestion) return null;
 
@@ -278,7 +285,8 @@ export default function TaskManagementPage() {
     const newSourceColumn = { ...sourceColumn, taskIds: newSourceTaskIds };
 
     const newDestinationTaskIds = Array.from(destinationColumn.taskIds);
-    newDestinationTaskIds.push(taskId);
+    // Move to the top of the list in the new column
+    newDestinationTaskIds.unshift(taskId);
     const newDestinationColumn = { ...destinationColumn, taskIds: newDestinationTaskIds };
 
     const newState = {
@@ -354,7 +362,8 @@ export default function TaskManagementPage() {
 
       const column = data.columns[columnId];
       const newTaskIds = Array.from(column.taskIds);
-      newTaskIds.push(newTaskId);
+      // Add new tasks to the beginning of the list
+      newTaskIds.unshift(newTaskId);
       
       const newState: TaskData = {
           ...data,
@@ -378,6 +387,11 @@ export default function TaskManagementPage() {
           });
       } catch (error) {
           console.error("Failed to get priority from AI", error);
+          toast({
+              title: "AI Error",
+              description: "Could not get AI priority. Defaulting to Medium.",
+              variant: "destructive"
+          });
           // Fallback to manual add if AI fails
           addTaskWithPriority(content, columnId, 'Medium');
       } finally {
@@ -391,6 +405,13 @@ export default function TaskManagementPage() {
       }
       setAiSuggestion(null);
   };
+
+  const handleCancelPriority = () => {
+    if (aiSuggestion) {
+        addTaskWithPriority(aiSuggestion.taskContent, aiSuggestion.columnId, 'Medium');
+    }
+    setAiSuggestion(null);
+  }
 
   return (
     <div className="flex flex-col h-screen overflow-hidden">
@@ -433,8 +454,10 @@ export default function TaskManagementPage() {
         <PriorityConfirmationDialog 
             suggestion={aiSuggestion}
             onConfirm={handleConfirmPriority}
-            onCancel={() => setAiSuggestion(null)}
+            onCancel={handleCancelPriority}
         />
     </div>
   );
 }
+
+    
