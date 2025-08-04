@@ -51,10 +51,10 @@ export function AIChatAssistant() {
         <SheetTrigger asChild>
           <Button
             size="lg"
-            className="fixed bottom-6 right-6 rounded-full w-16 h-16 shadow-lg bg-accent text-accent-foreground hover:bg-accent/90 focus:ring-accent animate-bounce p-0 overflow-hidden"
+            className="fixed bottom-6 right-6 rounded-full w-16 h-16 shadow-lg bg-accent text-accent-foreground hover:bg-accent/90 focus:ring-accent animate-bounce p-0"
             aria-label="Open AI Assistant"
           >
-            <ChibiBoyIcon className="h-16 w-16" />
+            <ChibiBoyIcon className="h-24 w-24" />
           </Button>
         </SheetTrigger>
         <SheetContent className="flex flex-col w-full sm:max-w-md">
