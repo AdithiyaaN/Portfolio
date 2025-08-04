@@ -1,3 +1,4 @@
+
 import Link from "next/link";
 import { MountainIcon } from "lucide-react";
 
@@ -12,13 +13,10 @@ export function Header() {
         <Link href="/about" className="text-sm font-medium hover:text-accent underline-offset-4" prefetch={false}>
           About
         </Link>
-        <Link href="#projects" className="text-sm font-medium hover:text-accent underline-offset-4" prefetch={false}>
+        <Link href="/projects" className="text-sm font-medium hover:text-accent underline-offset-4" prefetch={false}>
           Projects
         </Link>
-        <Link href="#skills" className="text-sm font-medium hover:text-accent underline-offset-4" prefetch={false}>
-          Skills
-        </Link>
-        <Link href="#contact" className="text-sm font-medium hover:text-accent underline-offset-4" prefetch={false}>
+        <Link href="/contact" className="text-sm font-medium hover:text-accent underline-offset-4" prefetch={false}>
           Contact
         </Link>
       </nav>

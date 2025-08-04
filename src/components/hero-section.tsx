@@ -1,3 +1,4 @@
+
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
@@ -19,7 +20,7 @@ export function HeroSection() {
           </div>
           <div className="w-full max-w-sm sm:max-w-md">
               <Button asChild size="lg" className="w-full bg-accent text-accent-foreground hover:bg-accent/90">
-                <Link href="#projects">View My Projects</Link>
+                <Link href="/projects">View My Projects</Link>
               </Button>
           </div>
         </div>
