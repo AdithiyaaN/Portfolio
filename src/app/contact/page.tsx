@@ -14,7 +14,7 @@ export default function ContactPage() {
         <div className="flex flex-col min-h-screen">
             <Header />
             <main className="flex-1 flex flex-col items-center justify-center py-12 px-4">
-                 <div className="w-full max-w-lg mb-4">
+                 <div className="w-full max-w-lg mb-4 pt-8">
                     <Button asChild variant="ghost">
                         <Link href="/">
                             <ArrowLeft className="mr-2 h-4 w-4" />
