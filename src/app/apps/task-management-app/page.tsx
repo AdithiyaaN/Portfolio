@@ -437,7 +437,7 @@ export default function TaskManagementPage() {
                     </div>
                 )}
                 <div className="flex-1 overflow-x-auto">
-                    {isClient ? (
+                    {isClient && (
                         <DragDropContext onDragEnd={onDragEnd}>
                             <div className="flex gap-6 h-full pb-4">
                                 {data.columnOrder.map(columnId => {
@@ -447,7 +447,7 @@ export default function TaskManagementPage() {
                                 })}
                             </div>
                         </DragDropContext>
-                    ) : <p>Loading board...</p>}
+                    )}
                 </div>
             </div>
         </main>
