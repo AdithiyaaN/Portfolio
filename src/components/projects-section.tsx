@@ -4,6 +4,7 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter }
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
 
 const projects = [
   {
@@ -46,7 +47,7 @@ export function ProjectsSection() {
         </div>
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 mt-12">
           {projects.map((project) => (
-            <Card key={project.title} className="flex flex-col overflow-hidden transform transition-transform duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-accent/20">
+            <Card key={project.title} className={cn("flex flex-col overflow-hidden transform transition-transform duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-accent/20", project.slug === "ecommerce-platform" && "pl-10")}>
                 <Image
                   src={project.image}
                   alt={project.title}
