@@ -26,15 +26,15 @@ export function ChibiBoyIcon({ className }: { className?: string }) {
         />
         <path
             d="m16.5 29.83a8.33 8.33 0 0 1 -8.32-8.32 1.5 1.5 0 0 1 3 0 5.33 5.33 0 0 0 5.32 5.32 1.5 1.5 0 0 1 0 3z"
-            fill="hsl(var(--accent))"
+            fill="hsl(var(--background))"
         />
         <path
             d="m12.79 26.68a4.43 4.43 0 1 1 4.43-4.42 4.43 4.43 0 0 1 -4.43 4.42zm0-5.86a1.43 1.43 0 1 0 1.43 1.43 1.43 1.43 0 0 0 -1.43-1.43z"
-            fill="hsl(var(--foreground))"
+            fill="hsl(var(--accent-foreground))"
         />
         <path
             d="m21.21 21.05a4.43 4.43 0 1 1 4.43-4.42 4.43 4.43 0 0 1 -4.43 4.42zm0-5.86a1.43 1.43 0 1 0 1.43 1.43 1.43 1.43 0 0 0 -1.43-1.43z"
-            fill="hsl(var(--foreground))"
+            fill="hsl(var(--accent-foreground))"
         />
     </svg>
   );
