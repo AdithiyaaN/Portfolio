@@ -139,44 +139,42 @@ const Timer = ({ task, onTimerUpdate }: { task: Task, onTimerUpdate: (taskId: st
 
 const TaskCard = ({ task, columnId, onMoveTask, onTimerUpdate }: { task: Task; columnId: ColumnId, onMoveTask: (taskId: string, sourceColumnId: ColumnId, destinationColumnId: ColumnId) => void; onTimerUpdate: (taskId: string, remainingSeconds: number) => void; }) => {
   return (
-    <div className="mb-4">
-      <Card className="bg-card hover:bg-card/90 flex flex-col">
-        <CardContent className="p-4 pb-0 flex-grow">
-          <p className="font-medium">{task.content}</p>
-          <div className="flex justify-between items-center mt-4">
-            <PriorityBadge priority={task.priority} />
-            {columnId === 'column-2' ? (
-                <Timer task={task} onTimerUpdate={onTimerUpdate} />
-            ) : (
-                <Badge variant="outline">
-                    <TimerIcon className="mr-1.5 h-4 w-4" />
-                    {task.timeEstimateMinutes} min
-                </Badge>
-            )}
-          </div>
-          {task.assignee && (
-              <Avatar className="h-8 w-8 mt-4">
-                  <AvatarImage src={task.assignee} alt="Assignee"/>
-                  <AvatarFallback>AD</AvatarFallback>
-              </Avatar>
+    <Card className="mb-4 bg-card hover:bg-card/90 flex flex-col">
+      <CardContent className="p-4 pb-0 flex-grow">
+        <p className="font-medium">{task.content}</p>
+        <div className="flex justify-between items-center mt-4">
+          <PriorityBadge priority={task.priority} />
+          {columnId === 'column-2' ? (
+              <Timer task={task} onTimerUpdate={onTimerUpdate} />
+          ) : (
+              <Badge variant="outline">
+                  <TimerIcon className="mr-1.5 h-4 w-4" />
+                  {task.timeEstimateMinutes} min
+              </Badge>
           )}
-        </CardContent>
-        <CardFooter className="p-4">
-             {columnId === 'column-1' && (
-                <Button variant="outline" size="sm" className="w-full" onClick={() => onMoveTask(task.id, 'column-1', 'column-2')}>
-                    <Play className="mr-2 h-4 w-4" />
-                    Start Task
-                </Button>
-            )}
-            {columnId === 'column-2' && (
-                <Button variant="outline" size="sm" className="w-full" onClick={() => onMoveTask(task.id, 'column-2', 'column-3')}>
-                    <CheckCircle className="mr-2 h-4 w-4" />
-                    Mark as Done
-                </Button>
-            )}
-        </CardFooter>
-      </Card>
-    </div>
+        </div>
+        {task.assignee && (
+            <Avatar className="h-8 w-8 mt-4">
+                <AvatarImage src={task.assignee} alt="Assignee"/>
+                <AvatarFallback>AD</AvatarFallback>
+            </Avatar>
+        )}
+      </CardContent>
+      <CardFooter className="p-4 mt-2">
+           {columnId === 'column-1' && (
+              <Button variant="outline" size="sm" className="w-full" onClick={() => onMoveTask(task.id, 'column-1', 'column-2')}>
+                  <Play className="mr-2 h-4 w-4" />
+                  Start Task
+              </Button>
+          )}
+          {columnId === 'column-2' && (
+              <Button variant="outline" size="sm" className="w-full" onClick={() => onMoveTask(task.id, 'column-2', 'column-3')}>
+                  <CheckCircle className="mr-2 h-4 w-4" />
+                  Mark as Done
+              </Button>
+          )}
+      </CardFooter>
+    </Card>
   );
 };
 
@@ -230,7 +228,7 @@ const ColumnComponent = ({ column, tasks, onAddTask, onMoveTask, onTimerUpdate }
         {tasks.map((task) => <TaskCard key={task.id} task={task} columnId={column.id as ColumnId} onMoveTask={onMoveTask} onTimerUpdate={onTimerUpdate} />)}
       </CardContent>
       {column.id === 'column-1' && (
-        <CardContent className="p-4 pt-0">
+        <CardFooter className="p-4 pt-0">
           {isAdding ? (
             <AddTaskForm 
                 columnId={column.id} 
@@ -243,7 +241,7 @@ const ColumnComponent = ({ column, tasks, onAddTask, onMoveTask, onTimerUpdate }
                 Add a card
             </Button>
           )}
-        </CardContent>
+        </CardFooter>
       )}
     </Card>
   );
@@ -258,7 +256,7 @@ const PriorityConfirmationDialog = ({
   onConfirm: (priority: Priority) => void;
   onCancel: () => void;
 }) => {
-  const [selectedPriority, setSelectedPriority] = useState<Priority | null>(suggestion?.priority || null);
+  const [selectedPriority, setSelectedPriority] = useState<Priority | null>(null);
 
   useEffect(() => {
     if (suggestion) {
@@ -297,7 +295,7 @@ const PriorityConfirmationDialog = ({
         </RadioGroup>
         <AlertDialogFooter>
           <AlertDialogCancel onClick={onCancel}>Cancel</AlertDialogCancel>
-          <AlertDialogAction onClick={() => onConfirm(selectedPriority!)}>Confirm</AlertDialogAction>
+          <AlertDialogAction onClick={() => selectedPriority && onConfirm(selectedPriority)}>Confirm</AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
@@ -312,50 +310,48 @@ export default function TaskManagementPage() {
   const { toast } = useToast();
 
   const moveTask = useCallback((taskId: string, sourceColumnId: ColumnId, destinationColumnId: ColumnId) => {
-    if (!data) return;
+    setData((prevData) => {
+        if (!prevData) return prevData;
 
-    const sourceColumn = data.columns[sourceColumnId];
-    const destinationColumn = data.columns[destinationColumnId];
+        const sourceColumn = prevData.columns[sourceColumnId];
+        const destinationColumn = prevData.columns[destinationColumnId];
 
-    const newSourceTaskIds = Array.from(sourceColumn.taskIds);
-    newSourceTaskIds.splice(newSourceTaskIds.indexOf(taskId), 1);
-    const newSourceColumn = { ...sourceColumn, taskIds: newSourceTaskIds };
+        const newSourceTaskIds = Array.from(sourceColumn.taskIds);
+        newSourceTaskIds.splice(newSourceTaskIds.indexOf(taskId), 1);
 
-    const newDestinationTaskIds = Array.from(destinationColumn.taskIds);
-    newDestinationTaskIds.unshift(taskId);
-    const newDestinationColumn = { ...destinationColumn, taskIds: newDestinationTaskIds };
+        const newDestinationTaskIds = Array.from(destinationColumn.taskIds);
+        newDestinationTaskIds.unshift(taskId);
 
-    const task = data.tasks[taskId];
-    let updatedTask = { ...task };
-    if (destinationColumnId === 'column-2') { // Moving to In Progress
-        updatedTask.timerStartedAt = Date.now();
-    } else { // Moving out of In Progress
-        updatedTask.timerStartedAt = null;
-    }
+        const task = prevData.tasks[taskId];
+        let updatedTask = { ...task };
+        if (destinationColumnId === 'column-2') { // Moving to In Progress
+            updatedTask.timerStartedAt = Date.now();
+        } else { // Moving out of In Progress
+            updatedTask.timerStartedAt = null;
+        }
 
+        const newState = {
+            ...prevData,
+            tasks: {
+                ...prevData.tasks,
+                [taskId]: updatedTask
+            },
+            columns: {
+                ...prevData.columns,
+                [sourceColumnId]: { ...sourceColumn, taskIds: newSourceTaskIds },
+                [destinationColumnId]: { ...destinationColumn, taskIds: newDestinationTaskIds },
+            },
+        };
 
-    const newState = {
-        ...data,
-        tasks: {
-            ...data.tasks,
-            [taskId]: updatedTask
-        },
-        columns: {
-            ...data.columns,
-            [newSourceColumn.id]: newSourceColumn,
-            [newDestinationColumn.id]: newDestinationColumn,
-        },
-    };
-    setData(newState);
-
-    if (destinationColumnId === 'column-3') {
-        const task = data.tasks[taskId];
-        toast({
-            title: "Task Completed!",
-            description: `Great job on finishing "${task.content}"!`,
-        });
-    }
-  }, [data, toast]);
+        if (destinationColumnId === 'column-3') {
+            toast({
+                title: "Task Completed!",
+                description: `Great job on finishing "${task.content}"!`,
+            });
+        }
+        return newState;
+    });
+  }, [toast]);
   
   const addTaskWithPriority = useCallback((content: string, columnId: string, priority: Priority, timeEstimateMinutes: number) => {
       const newTaskId = `task-${Date.now()}-${Math.random()}`;
@@ -368,20 +364,22 @@ export default function TaskManagementPage() {
           timerStartedAt: null,
       };
 
-      const column = data.columns[columnId];
-      const newTaskIds = Array.from(column.taskIds);
-      newTaskIds.unshift(newTaskId);
-      
-      const newState: TaskData = {
-          ...data,
-          tasks: { ...data.tasks, [newTaskId]: newTask },
-          columns: {
-              ...data.columns,
-              [columnId]: { ...column, taskIds: newTaskIds }
-          }
-      };
-      setData(newState);
-  }, [data]);
+      setData(prevData => {
+        const column = prevData.columns[columnId];
+        const newTaskIds = Array.from(column.taskIds);
+        newTaskIds.unshift(newTaskId);
+        
+        const newState: TaskData = {
+            ...prevData,
+            tasks: { ...prevData.tasks, [newTaskId]: newTask },
+            columns: {
+                ...prevData.columns,
+                [columnId]: { ...column, taskIds: newTaskIds }
+            }
+        };
+        return newState;
+      });
+  }, []);
   
   const handleAddTask = async (content: string, columnId: string) => {
       setIsPrioritizing(true);
@@ -475,3 +473,5 @@ export default function TaskManagementPage() {
     </div>
   );
 }
+
+    
