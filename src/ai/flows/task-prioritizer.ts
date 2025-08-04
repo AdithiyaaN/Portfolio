@@ -18,6 +18,7 @@ export type PrioritizeTaskInput = z.infer<typeof PrioritizeTaskInputSchema>;
 const PrioritizeTaskOutputSchema = z.object({
   priority: z.enum(['High', 'Medium', 'Low']).describe('The suggested priority for the task.'),
   justification: z.string().describe('A brief explanation for why this priority was chosen.'),
+  timeEstimateMinutes: z.number().describe('The estimated time in minutes to complete the task.'),
 });
 export type PrioritizeTaskOutput = z.infer<typeof PrioritizeTaskOutputSchema>;
 
@@ -29,14 +30,16 @@ const prompt = ai.definePrompt({
   name: 'prioritizeTaskPrompt',
   input: {schema: PrioritizeTaskInputSchema},
   output: {schema: PrioritizeTaskOutputSchema},
-  prompt: `You are a project management assistant. Your goal is to analyze the content of a task and assign a priority level to it: "High", "Medium", or "Low".
+  prompt: `You are a project management assistant. Your goal is to analyze the content of a task, assign a priority level to it ("High", "Medium", or "Low"), and estimate the time it will take to complete in minutes.
 
   Analyze the following task content:
   "{{{taskContent}}}"
 
   Consider urgency, importance, and potential impact when assigning the priority. For example, tasks with words like "urgent", "immediately", or "blocker" should be High priority. Tasks that seem like regular chores or maintenance should be Medium or Low.
 
-  Provide a brief justification for your choice.
+  Provide a time estimate in minutes. A simple task might take 15-30 minutes, while a more complex one could take 60 minutes or more.
+
+  Provide a brief justification for your priority choice.
   `,
 });
 
