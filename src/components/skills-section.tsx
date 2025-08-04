@@ -25,10 +25,10 @@ export function SkillsSection() {
             </p>
           </div>
         </div>
-        <div className="flex justify-center mt-12">
-          <div className="mx-auto grid max-w-5xl items-start gap-6 md:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-12">
+          <div className="mx-auto grid max-w-5xl justify-items-center gap-6 md:grid-cols-2 lg:grid-cols-4">
             {skills.map((skill) => (
-              <Card key={skill.name} className="flex flex-col justify-between text-center items-center">
+              <Card key={skill.name} className="flex flex-col justify-between text-center items-center w-full max-w-xs">
                 <CardHeader>
                   {skill.icon}
                   <CardTitle>{skill.name}</CardTitle>

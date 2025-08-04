@@ -6,7 +6,7 @@ export function AboutSection() {
   return (
     <section id="about" className="w-full py-12 md:py-24 lg:py-32 bg-card">
       <div className="container px-4 md:px-6">
-        <div className="grid items-center gap-6 lg:grid-cols-2 lg:gap-12">
+        <div className="grid items-center justify-items-center gap-6 lg:grid-cols-1 lg:gap-12 text-center">
           <div className="flex justify-center">
             <Image
               src="https://placehold.co/400x400.png"
@@ -17,7 +17,7 @@ export function AboutSection() {
               data-ai-hint="profile picture"
             />
           </div>
-          <div className="flex flex-col justify-center space-y-4">
+          <div className="flex flex-col items-center justify-center space-y-4">
             <div className="space-y-2">
               <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl text-accent">About Me</h2>
               <p className="max-w-[600px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
