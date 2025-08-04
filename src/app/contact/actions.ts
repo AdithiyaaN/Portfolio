@@ -41,7 +41,7 @@ export async function submitContactForm(
     try {
         const { data, error } = await resend.emails.send({
             from: 'Portfolio Contact Form <onboarding@resend.dev>', // Must be from a verified domain in Resend
-            to: 'thunderfistluffy@gamil.com',
+            to: 'thunderfistluffy@gmail.com',
             subject: 'New Message from Portfolio Contact Form',
             reply_to: email,
             html: `
