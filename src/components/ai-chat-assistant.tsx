@@ -10,7 +10,6 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Bot, User, Send, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { ChibiBoyIcon } from './chibi-boy-icon';
 
 const initialState = {
   messages: [],
@@ -51,10 +50,10 @@ export function AIChatAssistant() {
         <SheetTrigger asChild>
           <Button
             size="lg"
-            className="fixed bottom-6 right-6 rounded-full w-16 h-16 shadow-lg bg-accent text-accent-foreground hover:bg-accent/90 focus:ring-accent animate-bounce p-0"
+            className="fixed bottom-6 right-6 rounded-full w-16 h-16 shadow-lg bg-accent text-accent-foreground hover:bg-accent/90 focus:ring-accent animate-bounce"
             aria-label="Open AI Assistant"
           >
-            <ChibiBoyIcon className="h-24 w-24" />
+            <Bot className="h-8 w-8" />
           </Button>
         </SheetTrigger>
         <SheetContent className="flex flex-col w-full sm:max-w-md">
