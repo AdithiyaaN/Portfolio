@@ -25,19 +25,21 @@ export function SkillsSection() {
             </p>
           </div>
         </div>
-        <div className="mx-auto grid max-w-5xl items-center justify-center gap-6 md:grid-cols-2 lg:grid-cols-4 mt-12">
-          {skills.map((skill) => (
-            <Card key={skill.name} className="flex flex-col justify-between text-center items-center">
-              <CardHeader>
-                {skill.icon}
-                <CardTitle>{skill.name}</CardTitle>
-              </CardHeader>
-              <CardContent className="w-full">
-                <Progress value={skill.level} className="w-full" aria-label={`${skill.name} proficiency ${skill.level}%`} />
-                <p className="text-right text-sm text-muted-foreground mt-2">{skill.level}%</p>
-              </CardContent>
-            </Card>
-          ))}
+        <div className="flex justify-center mt-12">
+          <div className="mx-auto grid max-w-5xl items-start gap-6 md:grid-cols-2 lg:grid-cols-4">
+            {skills.map((skill) => (
+              <Card key={skill.name} className="flex flex-col justify-between text-center items-center">
+                <CardHeader>
+                  {skill.icon}
+                  <CardTitle>{skill.name}</CardTitle>
+                </CardHeader>
+                <CardContent className="w-full">
+                  <Progress value={skill.level} className="w-full" aria-label={`${skill.name} proficiency ${skill.level}%`} />
+                  <p className="text-right text-sm text-muted-foreground mt-2">{skill.level}%</p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
         </div>
       </div>
     </section>
