@@ -9,8 +9,9 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Link from 'next/link';
-import { ArrowLeft, User, Building, Briefcase, Badge as BadgeIcon } from 'lucide-react';
+import { ArrowLeft, User, Building, Briefcase, Badge as BadgeIcon, Download } from 'lucide-react';
 import Image from 'next/image';
+import html2canvas from 'html2canvas';
 
 const IDCardPreview = ({
   name,
@@ -18,15 +19,17 @@ const IDCardPreview = ({
   company,
   idNumber,
   photo,
+  cardRef,
 }: {
   name: string;
   title: string;
   company: string;
   idNumber: string;
   photo: string | null;
+  cardRef: React.RefObject<HTMLDivElement>;
 }) => {
   return (
-    <Card className="w-full max-w-sm mx-auto shadow-2xl">
+    <Card ref={cardRef} className="w-full max-w-sm mx-auto shadow-2xl">
       <CardHeader className="bg-accent text-accent-foreground text-center p-4 rounded-t-lg">
         <CardTitle className="text-2xl">{company || 'Your Company'}</CardTitle>
         <CardDescription className="text-accent-foreground/80">Employee Identification</CardDescription>
@@ -65,6 +68,7 @@ export default function IDCardGeneratorPage() {
   const [photo, setPhoto] = useState<string | null>(null);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const cardRef = useRef<HTMLDivElement>(null);
 
   const handlePhotoUpload = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -73,6 +77,17 @@ export default function IDCardGeneratorPage() {
         setPhoto(event.target?.result as string);
       };
       reader.readAsDataURL(e.target.files[0]);
+    }
+  };
+  
+  const handleDownload = () => {
+    if (cardRef.current) {
+        html2canvas(cardRef.current).then((canvas) => {
+            const link = document.createElement('a');
+            link.download = 'id-card.png';
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        });
     }
   };
 
@@ -128,7 +143,13 @@ export default function IDCardGeneratorPage() {
             </div>
             <div>
                 <h2 className="text-2xl font-bold text-center mb-4">Live Preview</h2>
-                <IDCardPreview name={name} title={title} company={company} idNumber={idNumber} photo={photo} />
+                <IDCardPreview cardRef={cardRef} name={name} title={title} company={company} idNumber={idNumber} photo={photo} />
+                <div className="mt-6 text-center">
+                    <Button onClick={handleDownload} className="bg-accent text-accent-foreground hover:bg-accent/90">
+                        <Download className="mr-2 h-4 w-4" />
+                        Download ID Card
+                    </Button>
+                </div>
             </div>
           </div>
         </div>
