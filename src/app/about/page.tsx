@@ -4,13 +4,22 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
+import { ArrowLeft } from "lucide-react";
 
 export default function AboutPage() {
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
       <main className="flex-1">
-        <section id="about" className="w-full py-24 md:py-32 lg:py-40 bg-card">
+        <div className="container px-4 md:px-6 pt-24">
+            <Button asChild variant="ghost">
+                <Link href="/">
+                    <ArrowLeft className="mr-2 h-4 w-4" />
+                    Back to Home
+                </Link>
+            </Button>
+        </div>
+        <section id="about" className="w-full py-12 md:py-16 lg:py-24 bg-card">
           <div className="container px-4 md:px-6">
             <div className="grid items-center justify-items-center gap-6 lg:grid-cols-2 lg:gap-12 text-center lg:text-left">
               <div className="flex justify-center lg:justify-start">
