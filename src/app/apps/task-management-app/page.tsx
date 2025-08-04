@@ -338,7 +338,7 @@ export default function TaskManagementPage() {
 
   const handleCancelPriority = () => {
     if (aiSuggestion) {
-        addTaskWithPriority(aiSuggestion.taskContent, aiSuggestion.columnId, 'Medium');
+        addTaskWithPriority(aiSuggestion.taskContent, aiSuggestion.columnId, aiSuggestion.priority);
     }
     setAiSuggestion(null);
   }
@@ -385,3 +385,5 @@ export default function TaskManagementPage() {
     </div>
   );
 }
+
+    
