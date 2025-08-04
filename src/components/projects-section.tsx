@@ -47,7 +47,7 @@ export function ProjectsSection() {
         </div>
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 mt-12">
           {projects.map((project) => (
-            <Card key={project.title} className={cn("flex flex-col overflow-hidden transform transition-transform duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-accent/20", project.slug === "ecommerce-platform" && "pl-10")}>
+            <Card key={project.title} className={cn("flex flex-col overflow-hidden transform transition-transform duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-accent/20", project.slug === "ecommerce-platform" && "ml-10")}>
                 <Image
                   src={project.image}
                   alt={project.title}
