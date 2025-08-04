@@ -222,7 +222,7 @@ const PriorityConfirmationDialog = ({
   if (!suggestion) return null;
 
   return (
-    <AlertDialog open={!!suggestion} onOpenChange={onCancel}>
+    <AlertDialog open={!!suggestion}>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>AI Priority Suggestion</AlertDialogTitle>
