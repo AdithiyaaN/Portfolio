@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautiful-dnd';
 import { Header } from '@/components/header';
 import { Button } from '@/components/ui/button';
@@ -119,8 +119,10 @@ const AddTaskForm = ({ columnId, onAddTask, onCancel }: { columnId: string; onAd
                 onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && (e.preventDefault(), handleSubmit())}
                 onBlur={onCancel}
             />
-            <Button onClick={handleSubmit}>Add Card</Button>
-            <Button variant="ghost" onClick={onCancel}>Cancel</Button>
+            <div className="flex items-center gap-2">
+                <Button onClick={handleSubmit}>Add Card</Button>
+                <Button variant="ghost" onClick={onCancel}>Cancel</Button>
+            </div>
         </div>
     )
 }
@@ -166,12 +168,12 @@ const ColumnComponent = ({ column, tasks, onAddTask }: { column: Column; tasks: 
 
 
 export default function TaskManagementPage() {
-  const [data, setData] = useState<TaskData | null>(null);
+  const [data, setData] = useState<TaskData>(initialData);
+  const [isClient, setIsClient] = useState(false)
 
-  // react-beautiful-dnd needs the window object, so we can't SSR the board.
   useEffect(() => {
-    setData(initialData);
-  }, []);
+    setIsClient(true)
+  }, [])
 
   const onDragEnd = (result: DropResult) => {
     const { destination, source, draggableId } = result;
@@ -246,17 +248,6 @@ export default function TaskManagementPage() {
       setData(newState);
   }
 
-  if (!data) {
-    return (
-        <div className="flex flex-col min-h-screen">
-            <Header />
-            <main className="flex-1 flex items-center justify-center">
-                <p>Loading Task Board...</p>
-            </main>
-        </div>
-    )
-  }
-
   return (
     <div className="flex flex-col h-screen overflow-hidden">
         <Header />
@@ -275,15 +266,17 @@ export default function TaskManagementPage() {
                     </Button>
                 </div>
                 <div className="flex-1 overflow-x-auto">
-                    <DragDropContext onDragEnd={onDragEnd}>
-                        <div className="flex gap-6 h-full pb-4">
-                            {data.columnOrder.map(columnId => {
-                                const column = data.columns[columnId];
-                                const tasks = column.taskIds.map(taskId => data.tasks[taskId]);
-                                return <ColumnComponent key={column.id} column={column} tasks={tasks} onAddTask={handleAddTask} />;
-                            })}
-                        </div>
-                    </DragDropContext>
+                    {isClient ? (
+                        <DragDropContext onDragEnd={onDragEnd}>
+                            <div className="flex gap-6 h-full pb-4">
+                                {data.columnOrder.map(columnId => {
+                                    const column = data.columns[columnId];
+                                    const tasks = column.taskIds.map(taskId => data.tasks[taskId]);
+                                    return <ColumnComponent key={column.id} column={column} tasks={tasks} onAddTask={handleAddTask} />;
+                                })}
+                            </div>
+                        </DragDropContext>
+                    ) : <p>Loading board...</p>}
                 </div>
             </div>
         </main>
