@@ -269,7 +269,7 @@ const PriorityConfirmationDialog = ({
   if (!suggestion) return null;
 
   return (
-    <AlertDialog open={!!suggestion} onOpenChange={onCancel}>
+    <AlertDialog open={!!suggestion} onOpenChange={(isOpen) => !isOpen && onCancel()}>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>AI Priority Suggestion</AlertDialogTitle>
@@ -414,9 +414,6 @@ export default function TaskManagementPage() {
   };
 
   const handleCancelPriority = () => {
-    if (aiSuggestion) {
-        addTaskWithPriority(aiSuggestion.taskContent, aiSuggestion.columnId, aiSuggestion.priority, aiSuggestion.timeEstimateMinutes);
-    }
     setAiSuggestion(null);
   }
 
