@@ -414,7 +414,7 @@ export default function TaskManagementPage() {
   }
 
   return (
-    <div className="flex flex-col h-screen overflow-hidden task-app-theme">
+    <div className="flex flex-col h-screen overflow-hidden">
         <Header />
         <main className="flex-1 flex flex-col pt-16">
             <div className="container mx-auto px-4 md:px-6 py-8 flex-1 flex flex-col">
