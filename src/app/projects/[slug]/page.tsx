@@ -81,14 +81,7 @@ export default function ProjectDetailsPage({ params }: { params: { slug: string 
                                     Back to All Projects
                                </Link>
                             </Button>
-                            {project.liveLink && (
-                                <Button asChild>
-                                    <Link href={project.liveLink} target="_blank">
-                                        View Live Project
-                                        <ArrowRight className="ml-2 h-4 w-4" />
-                                    </Link>
-                                </Button>
-                            )}
+                            
                         </div>
                         <h1 className="text-4xl md:text-5xl font-bold tracking-tighter text-accent mb-4">{project.title}</h1>
                         <div className="flex flex-wrap gap-2 mb-8">
