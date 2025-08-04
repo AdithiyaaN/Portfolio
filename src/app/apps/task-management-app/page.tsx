@@ -25,6 +25,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Label } from "@/components/ui/label"
 import { prioritizeTask } from '@/ai/flows/task-prioritizer';
 import { useToast } from '@/hooks/use-toast';
+import { cn } from '@/lib/utils';
 
 
 type Priority = 'High' | 'Medium' | 'Low';
@@ -177,7 +178,7 @@ const ColumnComponent = ({ column, tasks, onAddTask, onMoveTask }: { column: Col
         <CardTitle className="text-lg">{column.title}</CardTitle>
         <Badge variant="secondary">{tasks.length}</Badge>
       </CardHeader>
-      <Droppable droppableId={column.id} isDropDisabled={isDropDisabled}>
+      <Droppable droppableId={column.id} isDropDisabled={column.id !== 'column-1'}>
         {(provided, snapshot) => (
           <CardContent
             ref={provided.innerRef}
@@ -229,7 +230,7 @@ const PriorityConfirmationDialog = ({
   if (!suggestion) return null;
 
   return (
-    <AlertDialog open={!!suggestion}>
+    <AlertDialog open={!!suggestion} onOpenChange={onCancel}>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>AI Priority Suggestion</AlertDialogTitle>
@@ -414,7 +415,7 @@ export default function TaskManagementPage() {
   }
 
   return (
-    <div className="flex flex-col h-screen overflow-hidden">
+    <div className={cn("flex flex-col h-screen overflow-hidden", "task-app-theme")}>
         <Header />
         <main className="flex-1 flex flex-col pt-16">
             <div className="container mx-auto px-4 md:px-6 py-8 flex-1 flex flex-col">
@@ -459,3 +460,5 @@ export default function TaskManagementPage() {
     </div>
   );
 }
+
+    
