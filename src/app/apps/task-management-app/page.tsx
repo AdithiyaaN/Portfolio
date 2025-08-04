@@ -1,21 +1,37 @@
 
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautiful-dnd';
 import { Header } from '@/components/header';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { ArrowLeft, Plus, GripVertical } from 'lucide-react';
+import { ArrowLeft, Plus, Loader2 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Textarea } from '@/components/ui/textarea';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import { Label } from "@/components/ui/label"
+import { prioritizeTask } from '@/ai/flows/task-prioritizer';
+
+
+type Priority = 'High' | 'Medium' | 'Low';
 
 type Task = {
   id: string;
   content: string;
-  priority: 'High' | 'Medium' | 'Low';
+  priority: Priority;
   assignee?: string;
 };
 
@@ -30,6 +46,13 @@ type TaskData = {
   columns: { [key: string]: Column };
   columnOrder: string[];
 };
+
+type AIPrioritySuggestion = {
+    priority: Priority,
+    justification: string,
+    taskContent: string,
+    columnId: string,
+} | null;
 
 const initialData: TaskData = {
   tasks: {},
@@ -166,14 +189,63 @@ const ColumnComponent = ({ column, tasks, onAddTask }: { column: Column; tasks: 
   );
 };
 
+const PriorityConfirmationDialog = ({
+  suggestion,
+  onConfirm,
+  onCancel,
+}: {
+  suggestion: AIPrioritySuggestion;
+  onConfirm: (priority: Priority) => void;
+  onCancel: () => void;
+}) => {
+  const [selectedPriority, setSelectedPriority] = useState<Priority | null>(suggestion?.priority || null);
+
+  if (!suggestion) return null;
+
+  return (
+    <AlertDialog open={!!suggestion} onOpenChange={onCancel}>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>AI Priority Suggestion</AlertDialogTitle>
+          <AlertDialogDescription>
+            Based on the task content, our AI suggests the following priority. Is this correct?
+            <br />
+            <strong className="text-foreground">Justification:</strong> {suggestion.justification}
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <RadioGroup value={selectedPriority!} onValueChange={(value) => setSelectedPriority(value as Priority)} className="my-4">
+            <div className="flex items-center space-x-2">
+                <RadioGroupItem value="High" id="p-high"/>
+                <Label htmlFor="p-high">High</Label>
+            </div>
+            <div className="flex items-center space-x-2">
+                <RadioGroupItem value="Medium" id="p-medium" />
+                <Label htmlFor="p-medium">Medium</Label>
+            </div>
+             <div className="flex items-center space-x-2">
+                <RadioGroupItem value="Low" id="p-low" />
+                <Label htmlFor="p-low">Low</Label>
+            </div>
+        </RadioGroup>
+        <AlertDialogFooter>
+          <AlertDialogCancel onClick={onCancel}>Cancel</AlertDialogCancel>
+          <AlertDialogAction onClick={() => onConfirm(selectedPriority!)}>Confirm</AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+  );
+};
+
 
 export default function TaskManagementPage() {
   const [data, setData] = useState<TaskData>(initialData);
-  const [isClient, setIsClient] = useState(false)
+  const [isClient, setIsClient] = useState(false);
+  const [isPrioritizing, setIsPrioritizing] = useState(false);
+  const [aiSuggestion, setAiSuggestion] = useState<AIPrioritySuggestion>(null);
 
   useEffect(() => {
     setIsClient(true)
-  }, [])
+  }, []);
 
   const onDragEnd = (result: DropResult) => {
     const { destination, source, draggableId } = result;
@@ -216,15 +288,9 @@ export default function TaskManagementPage() {
     setData(newState);
   };
   
-  const handleAddTask = (content: string, columnId: string) => {
-      if (!data) return;
-
+  const addTaskWithPriority = useCallback((content: string, columnId: string, priority: Priority) => {
       const newTaskId = `task-${Object.keys(data.tasks).length + 1 + Date.now()}`;
-      const newTask: Task = {
-          id: newTaskId,
-          content,
-          priority: 'Medium', // Default priority
-      };
+      const newTask: Task = { id: newTaskId, content, priority };
 
       const column = data.columns[columnId];
       const newTaskIds = Array.from(column.taskIds);
@@ -232,21 +298,39 @@ export default function TaskManagementPage() {
       
       const newState: TaskData = {
           ...data,
-          tasks: {
-              ...data.tasks,
-              [newTaskId]: newTask,
-          },
+          tasks: { ...data.tasks, [newTaskId]: newTask },
           columns: {
               ...data.columns,
-              [columnId]: {
-                  ...column,
-                  taskIds: newTaskIds
-              }
+              [columnId]: { ...column, taskIds: newTaskIds }
           }
       };
-
       setData(newState);
-  }
+  }, [data]);
+  
+  const handleAddTask = async (content: string, columnId: string) => {
+      setIsPrioritizing(true);
+      try {
+          const result = await prioritizeTask({ taskContent: content });
+          setAiSuggestion({
+              ...result,
+              taskContent: content,
+              columnId: columnId,
+          });
+      } catch (error) {
+          console.error("Failed to get priority from AI", error);
+          // Fallback to manual add if AI fails
+          addTaskWithPriority(content, columnId, 'Medium');
+      } finally {
+          setIsPrioritizing(false);
+      }
+  };
+
+  const handleConfirmPriority = (priority: Priority) => {
+      if (aiSuggestion) {
+          addTaskWithPriority(aiSuggestion.taskContent, aiSuggestion.columnId, priority);
+      }
+      setAiSuggestion(null);
+  };
 
   return (
     <div className="flex flex-col h-screen overflow-hidden">
@@ -265,6 +349,12 @@ export default function TaskManagementPage() {
                         </Link>
                     </Button>
                 </div>
+                {isPrioritizing && (
+                    <div className="flex items-center justify-center gap-2 text-muted-foreground my-4">
+                        <Loader2 className="h-5 w-5 animate-spin" />
+                        <span>AI is prioritizing your task...</span>
+                    </div>
+                )}
                 <div className="flex-1 overflow-x-auto">
                     {isClient ? (
                         <DragDropContext onDragEnd={onDragEnd}>
@@ -280,6 +370,11 @@ export default function TaskManagementPage() {
                 </div>
             </div>
         </main>
+        <PriorityConfirmationDialog 
+            suggestion={aiSuggestion}
+            onConfirm={handleConfirmPriority}
+            onCancel={() => setAiSuggestion(null)}
+        />
     </div>
   );
 }
