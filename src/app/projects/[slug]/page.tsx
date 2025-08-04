@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 
 // This is mock data. In a real application, you'd fetch this from a CMS or database.
 const projects = [
@@ -17,6 +17,7 @@ const projects = [
     image: "https://placehold.co/1200x600.png",
     imageHint: "python code editor",
     tags: ["Python", "Automation", "OpenCV", "Pillow"],
+    href: "/apps/id-card-generator",
   },
   {
     title: "Task Management App",
@@ -26,6 +27,7 @@ const projects = [
     image: "https://placehold.co/1200x600.png",
     imageHint: "task board kanban",
     tags: ["React", "Node.js", "GraphQL", "MongoDB"],
+    href: "/projects/task-management-app",
   },
   {
     title: "Personal Blog",
@@ -35,6 +37,7 @@ const projects = [
     image: "https://placehold.co/1200x600.png",
     imageHint: "minimalist blog post",
     tags: ["Next.js", "Markdown", "Tailwind CSS"],
+    href: "/projects/personal-blog",
   },
 ];
 
@@ -66,6 +69,24 @@ export default function ProjectDetailsPage({ params }: { params: { slug: string 
                 <Footer />
             </div>
         );
+    }
+
+    if (project.slug === 'id-card-generator') {
+         // This is a special case to redirect to the app page.
+        // In a real app you might handle this differently.
+        return (
+             <div className="flex flex-col min-h-screen">
+                <Header />
+                <main className="flex-1 flex items-center justify-center">
+                    <div className="text-center">
+                        <h1 className="text-2xl font-bold">Redirecting to app...</h1>
+                        <p className="mt-4 text-muted-foreground">This project is an interactive application.</p>
+                         <meta http-equiv="refresh" content={`0; url=${project.href}`} />
+                    </div>
+                </main>
+                <Footer />
+            </div>
+        )
     }
 
     return (

@@ -1,3 +1,4 @@
+
 import Image from "next/image";
 import Link from "next/link";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
@@ -10,10 +11,11 @@ const projects = [
   {
     title: "ID Card Generation App",
     slug: "id-card-generator",
-    description: "A Python automation script that generates ID cards from a given template and data.",
+    description: "An interactive app to generate professional ID cards on the fly.",
     image: "https://placehold.co/600x400.png",
     imageHint: "id card python",
-    tags: ["Python", "Automation", "OpenCV"],
+    tags: ["React", "Next.js", "TypeScript"],
+    href: "/apps/id-card-generator"
   },
   {
     title: "Task Management App",
@@ -22,6 +24,7 @@ const projects = [
     image: "https://placehold.co/600x400.png",
     imageHint: "task manager",
     tags: ["React", "Node.js", "GraphQL", "MongoDB"],
+    href: "/projects/task-management-app"
   },
   {
     title: "Personal Blog",
@@ -30,6 +33,7 @@ const projects = [
     image: "https://placehold.co/600x400.png",
     imageHint: "blog interface",
     tags: ["Next.js", "Markdown", "Tailwind CSS"],
+    href: "/projects/personal-blog"
   },
 ];
 
@@ -72,7 +76,7 @@ export function ProjectsSection() {
               </CardContent>
               <CardFooter className="p-6 pt-0">
                 <Button asChild variant="outline" className="w-full hover:bg-accent hover:text-accent-foreground border-accent text-accent">
-                  <Link href={`/projects/${project.slug}`}>
+                  <Link href={project.href}>
                     View Project
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </Link>
