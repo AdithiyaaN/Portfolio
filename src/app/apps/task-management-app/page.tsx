@@ -177,7 +177,7 @@ const ColumnComponent = ({ column, tasks, onAddTask, onMoveTask }: { column: Col
         <CardTitle className="text-lg">{column.title}</CardTitle>
         <Badge variant="secondary">{tasks.length}</Badge>
       </CardHeader>
-      <Droppable droppableId={column.id}>
+      <Droppable droppableId={column.id} isDropDisabled={false}>
         {(provided, snapshot) => (
           <CardContent
             ref={provided.innerRef}
@@ -459,6 +459,8 @@ export default function TaskManagementPage() {
     </div>
   );
 }
+
+    
 
     
 
