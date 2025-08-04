@@ -6,12 +6,22 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
 
 export default function ContactPage() {
     return (
         <div className="flex flex-col min-h-screen">
             <Header />
-            <main className="flex-1 flex items-center justify-center py-12 px-4">
+            <main className="flex-1 flex flex-col items-center justify-center py-12 px-4">
+                 <div className="w-full max-w-lg mb-4">
+                    <Button asChild variant="ghost">
+                        <Link href="/">
+                            <ArrowLeft className="mr-2 h-4 w-4" />
+                            Back to Home
+                        </Link>
+                    </Button>
+                </div>
                 <Card className="w-full max-w-lg">
                     <CardHeader>
                         <CardTitle className="text-3xl font-bold text-accent">Contact Me</CardTitle>
