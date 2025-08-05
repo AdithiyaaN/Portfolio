@@ -27,7 +27,7 @@ const projects = [
     image: "https://placehold.co/1200x600.png",
     imageHint: "task board kanban",
     tags: ["React", "Node.js", "GraphQL", "MongoDB"],
-    href: "/projects/task-management-app",
+    href: "/apps/task-management-app",
   },
   {
     title: "Personal Blog",
@@ -71,7 +71,7 @@ export default function ProjectDetailsPage({ params }: { params: { slug: string 
         );
     }
 
-    if (project.slug === 'id-card-generator') {
+    if (project.slug === 'id-card-generator' || project.slug === 'task-management-app') {
          // This is a special case to redirect to the app page.
         // In a real app you might handle this differently.
         return (
@@ -122,6 +122,13 @@ export default function ProjectDetailsPage({ params }: { params: { slug: string 
                             <p className="lead mb-6">{project.description}</p>
                             <p>{project.longDescription}</p>
                         </div>
+                         {project.href && (
+                             <div className="mt-8">
+                                <Button asChild>
+                                    <Link href={project.href}>View Project</Link>
+                                </Button>
+                            </div>
+                        )}
                     </div>
                 </div>
             </main>
