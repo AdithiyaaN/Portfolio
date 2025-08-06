@@ -68,7 +68,7 @@ export function AIChatAssistant() {
                   <AvatarFallback className='bg-background'><Bot className="text-accent" size={18}/></AvatarFallback>
                 </Avatar>
                 <div className="bg-muted rounded-lg p-3 max-w-[80%]">
-                  <p className="text-sm text-black">Hello! I'm Adi's AI assistant. Ask me anything about their skills, projects, or experience.</p>
+                  <p className="text-sm text-foreground">Hello! I'm Adi's AI assistant. Ask me anything about their skills, projects, or experience.</p>
                 </div>
               </div>
               {state.messages.map((message, index) => (
