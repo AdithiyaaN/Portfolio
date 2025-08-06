@@ -67,7 +67,7 @@ export function AIChatAssistant() {
                 <Avatar className="w-8 h-8 border border-accent">
                   <AvatarFallback className='bg-background'><Bot className="text-accent" size={18}/></AvatarFallback>
                 </Avatar>
-                <div className="bg-muted rounded-lg p-3 max-w-[80%]">
+                <div className="bg-card rounded-xl p-3 max-w-[80%]">
                   <p className="text-sm text-foreground">Hello! I'm Adi's AI assistant. Ask me anything about their skills, projects, or experience.</p>
                 </div>
               </div>
@@ -79,10 +79,10 @@ export function AIChatAssistant() {
                     </Avatar>
                   )}
                   <div className={cn(
-                    "rounded-lg p-3 max-w-[80%]",
-                    "bg-muted"
+                    "rounded-xl p-3 max-w-[80%]",
+                    message.role === 'user' ? "bg-accent text-accent-foreground" : "bg-card text-foreground"
                   )}>
-                    <p className="text-sm text-foreground">{message.content}</p>
+                    <p className="text-sm">{message.content}</p>
                   </div>
                   {message.role === 'user' && (
                      <Avatar className="w-8 h-8 border">
