@@ -80,9 +80,9 @@ export function AIChatAssistant() {
                   )}
                   <div className={cn(
                     "rounded-lg p-3 max-w-[80%]",
-                    message.role === 'user' ? 'bg-accent text-accent-foreground' : 'bg-muted text-muted-foreground'
+                    "bg-muted"
                   )}>
-                    <p className="text-sm">{message.content}</p>
+                    <p className="text-sm text-foreground">{message.content}</p>
                   </div>
                   {message.role === 'user' && (
                      <Avatar className="w-8 h-8 border">
