@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Bot, User, Send, Loader2 } from 'lucide-react';
+import { Bot, User, Send, Loader2, HelpCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const initialState = {
@@ -48,15 +48,23 @@ export function AIChatAssistant() {
   return (
     <>
       <Sheet open={open} onOpenChange={setOpen}>
-        <SheetTrigger asChild>
-          <Button
-            size="lg"
-            className="fixed bottom-6 right-6 rounded-full w-16 h-16 shadow-lg bg-accent text-accent-foreground hover:bg-accent/90 focus:ring-accent animate-bounce"
-            aria-label="Open AI Assistant"
-          >
-            <Bot className="h-8 w-8" />
-          </Button>
-        </SheetTrigger>
+        <div className="fixed bottom-6 right-6 flex items-center gap-4 z-50">
+            <div className="bg-card p-3 rounded-lg shadow-lg text-sm text-foreground animate-pulse">
+                <div className="flex items-center gap-2">
+                    <HelpCircle className="h-5 w-5 text-accent" />
+                    <span>Have questions? Ask my AI assistant!</span>
+                </div>
+            </div>
+            <SheetTrigger asChild>
+              <Button
+                size="lg"
+                className="rounded-full w-16 h-16 shadow-lg bg-accent text-accent-foreground hover:bg-accent/90 focus:ring-accent"
+                aria-label="Open AI Assistant"
+              >
+                <Bot className="h-8 w-8" />
+              </Button>
+            </SheetTrigger>
+        </div>
         <SheetContent className="flex flex-col w-full sm:max-w-md">
           <SheetHeader>
             <SheetTitle>Adi's AI Assistant</SheetTitle>
