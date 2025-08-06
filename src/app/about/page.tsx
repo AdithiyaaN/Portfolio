@@ -23,7 +23,7 @@ export default function AboutPage() {
           <div className="container px-4 md:px-6">
             <div className="grid items-center justify-items-center gap-6 lg:grid-cols-2 lg:gap-12 text-center lg:text-left">
               <div className="flex items-center justify-center lg:justify-start w-96 h-96 rounded-full bg-muted">
-                <User className="w-48 h-48 text-muted-foreground" />
+                <User className="w-48 h-48 text-muted-foreground animate-pulse" />
               </div>
               <div className="flex flex-col items-center lg:items-start justify-center space-y-4">
                 <div className="space-y-2">
