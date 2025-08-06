@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, User } from "lucide-react";
 
 export default function AboutPage() {
   return (
@@ -22,15 +22,8 @@ export default function AboutPage() {
         <section id="about" className="w-full py-12 md:py-16 lg:py-24 bg-card">
           <div className="container px-4 md:px-6">
             <div className="grid items-center justify-items-center gap-6 lg:grid-cols-2 lg:gap-12 text-center lg:text-left">
-              <div className="flex justify-center lg:justify-start">
-                <Image
-                  src="https://placehold.co/400x400.png"
-                  width={400}
-                  height={400}
-                  alt="Adi's Profile Picture"
-                  className="rounded-full object-cover"
-                  data-ai-hint="profile picture"
-                />
+              <div className="flex items-center justify-center lg:justify-start w-96 h-96 rounded-full bg-muted">
+                <User className="w-48 h-48 text-muted-foreground" />
               </div>
               <div className="flex flex-col items-center lg:items-start justify-center space-y-4">
                 <div className="space-y-2">
