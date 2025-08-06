@@ -24,7 +24,7 @@ export default function AboutPage() {
             <div className="grid items-center justify-items-center gap-6 lg:grid-cols-2 lg:gap-12 text-center lg:text-left">
               <div className="flex justify-center lg:justify-start">
                 <Image
-                  src="https://placehold.co/400x400.png"
+                  src="https://storage.googleapis.com/res-a-p-dev-testing-console-project/1721245084934.png"
                   width={400}
                   height={400}
                   alt="Adi's Profile Picture"
